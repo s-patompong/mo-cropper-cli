@@ -7,7 +7,7 @@ var rimraf = require("rimraf");
 
 console.log("Start auto cropping script");
 
-// Convert input to temp
+// Initialization
 const convertExePath = __dirname + `\\bin\\convert.exe`;
 const inputPath = __dirname + `\\input`;
 const tempPath = __dirname + `\\temp`;
@@ -20,6 +20,7 @@ var options = {
 
 var converter = new ConvertTiff(options);
 
+// Get all input files
 const files = fs.readdirSync(inputPath).filter(file => {
     const ext = helper.fileExt(file);
 
@@ -40,6 +41,7 @@ files.forEach(file => {
     }
 });
 
+// Copy all png file to temp folder
 pngFiles.forEach(path => {
     const fileName = helper.fileNameFromPath(path);
     const fileNameWithoutExtension = helper.fileNameWithoutExt(fileName);
@@ -57,6 +59,7 @@ pngFiles.forEach(path => {
 });
 
 (async () => {
+    // Convert all .tiff file to .png file
     const results = await converter.convertArray(tiffFiles, tempPath);
 
     results.converted.forEach(result => {
@@ -66,6 +69,7 @@ pngFiles.forEach(path => {
 
     console.log("Start cropping images");
 
+    // Get image folders from temp folder
     const imageFolders = fs.readdirSync(tempPath).filter(folder => {
         const folderPath = tempPath + `\\${folder}`;
 
@@ -76,6 +80,7 @@ pngFiles.forEach(path => {
     const countImage = imageFolders.length;
     let processedCount = 0;
 
+    // Start cropping each image
     imageFolders.forEach(folder => {
         const folderPath = tempPath + `\\${folder}`;
 
@@ -87,6 +92,7 @@ pngFiles.forEach(path => {
         const filePath = folderPath + `\\0.png`;
         const fileOutputPath = outputPath + `\\${fileName}`;
 
+        // Use image path to crop with Jimp
         Jimp.read(filePath, (err, image) => {
             if (err) throw err;
             image.autocrop({
@@ -99,6 +105,7 @@ pngFiles.forEach(path => {
 
             processedCount++;
 
+            // If it's the last image to process, we clean up input file and finish the process
             if(processedCount === countImage) {
                 console.log("Removing input files");
 
