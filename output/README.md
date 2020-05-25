@@ -1,0 +1,1 @@
+The cropped image will be in this folder

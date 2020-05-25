@@ -1,0 +1,1 @@
+Place images that you want to crop in this folder

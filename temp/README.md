@@ -1,0 +1,1 @@
+Don't touch this folder, program will use it to place temp images
