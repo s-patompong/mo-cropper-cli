@@ -1,5 +1,5 @@
 # Requirement
-1. Install nodejs for windows at https://nodejs.org/en/download/
+1. Install nodejs for windows, see https://nodejs.org/en/download/
 2. Run `npm install` to install dependencies
 
 # How to use
